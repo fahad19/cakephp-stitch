@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>CakePHP Stitch Plugin by fahad19</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>CakePHP Stitch Plugin</h1>
+        <p>Stitch your JavaScript files as CommonJS for the browser</p>
+
+        <p class="view"><a href="https://github.com/fahad19/cakephp-stitch">View the Project on GitHub <small>fahad19/cakephp-stitch</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/fahad19/cakephp-stitch/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/fahad19/cakephp-stitch/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/fahad19/cakephp-stitch">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p>This is a port of <a href="https://github.com/sstephenson" class="user-mention">@sstephenson</a>'s <a href="https://github.com/sstephenson/stitch">Stitch npm module</a>.</p>
+
+<h2>What is CommonJS?</h2>
+
+<p>Suppose you have two JavaScript files, under <code>app/webroot/js/</code> named <code>a.js</code> and <code>b.js</code>.</p>
+
+<p>Content of <code>a.js</code>:</p>
+
+<pre><code>var A = 'I am A';
+
+module.exports = A;
+</code></pre>
+
+<p>Now in <code>b.js</code>, we can <code>require()</code> A by doing this:</p>
+
+<pre><code>var A = require('A');
+var B = 'I am B, btw';
+var C = require('another_folder_in_webroot_js/c');
+
+module.exports = B; // exporting is optional
+</code></pre>
+
+<h2>Requirements</h2>
+
+<p>Compatible with CakePHP 2.x</p>
+
+<h2>Installation</h2>
+
+<p>Clone/Download this repository to <code>/app/Plugin/Stitch</code>, and load the plugin from <code>/app/Config/bootstrap.php</code>:</p>
+
+<pre><code>CakePlugin::load('Stitch', array('bootstrap' =&gt; true));
+</code></pre>
+
+<h2>Configuration</h2>
+
+<p>See configuration values in <code>app/Config/Stitch/Config/bootstrap.php</code> file.</p>
+
+<ul>
+<li>
+<strong>paths</strong>: array of absolute paths where JavaScript files are located</li>
+<li>
+<strong>vendors</strong>: array of vendors that you want available globally, like jQuery or Underscore.js</li>
+<li>
+<strong>write</strong>: absolute path of file where to write the compiled JavaScript file</li>
+</ul><h3>Conflicting module IDs and prefixing</h3>
+
+<p>There would be cases when you have multiple paths, and end up having two or more same module IDs. In those cases, you can consider prefixing your module IDs.</p>
+
+<p>For example, your paths include <code>/app/webroot/js/</code> and <code>/app/Plugin/MyPlugin/webroot/js</code>, and they both have <code>foo.js</code> under their respective js directories. Then you can prefix your plugin's path like this:</p>
+
+<pre><code>Configure::write('Stitch.paths', array(
+    '/app/webroot/js/',
+    '/app/Plugin/MyPlugin/webroot/js/' =&gt; array(
+        'prefix' =&gt; 'my_plugin',
+    ),
+));
+</code></pre>
+
+<p>Now in the browser, you can require() the files separately:</p>
+
+<pre><code>require('foo');
+require('my_plugin/foo');
+</code></pre>
+
+<h2>Usage</h2>
+
+<p>At the moment, Stitch can perform the compiling via shell based on the configuration found in bootstrap:</p>
+
+<pre><code>$ ./Console/cake Stitch.stitch run
+</code></pre>
+
+<p>The shell basically runs the compiler found in a separate Stitch class which is available as a library, and you are free to implement its functionality in various ways. For example, a new StitchHelper utilizing this library eliminating the need of running it via shell.</p>
+
+<p>See unit tests for understanding more on how the library works.</p>
+
+<h2>Extending</h2>
+
+<p>Stitch was written for handling JavaScript files only, files that end with <code>.js</code> as extensions. But you can extend it for supporting various extensions, like <code>.underscore</code> for Underscore.js templates and <code>.coffee</code> for CoffeeScript files. All you need to do is add new classes under <code>/app/Plugin/Stitch/Lib/Compiler/</code> and it will automatically map them based of file extensions.</p>
+
+<h3>Naming convention for compiler classes</h3>
+
+<p>Compiler class names begin with StitchCompiler and the suffix is the camelized version of file extension.</p>
+
+<ul>
+<li>
+<strong>.js</strong>: StitchCompilerJs.php</li>
+<li>
+<strong>.coffee</strong>: StitchCompilerCoffee.php</li>
+</ul><h2>License</h2>
+
+<p><a href="https://github.com/fahad19/cakephp-stitch/blob/master/LICENSE.txt">MIT License</a></p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/fahad19">fahad19</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
